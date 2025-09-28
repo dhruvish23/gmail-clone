@@ -23,11 +23,15 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Dynamic CORS for local + prod
-const corsOptions = {
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
-    credentials: true
-};
-app.use(cors(corsOptions));
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://dhruvish23.github.io"
+];
+
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true,
+}));
 
 // routes
 app.use('/api/v1/user', userRoute);

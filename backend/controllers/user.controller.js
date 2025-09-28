@@ -53,7 +53,7 @@ export const login = async (req, res) => {
         const tokenData = { userId: user._id };
         const token = await jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: "1d" });
 
-        return res.status(200).cookie("token", token, { maxAge: 12 * 60 * 60 * 1000, httpOnly: true, sameSite: "strict" }).json({
+        return res.status(200).cookie("token", token, { maxAge: 12 * 60 * 60 * 1000, httpOnly: true, secure: true, sameSite: "none" }).json({
             message: `${user.fullname} logged in successfully.`,
             user,
             success: true
@@ -142,7 +142,8 @@ export const googleLogin = async (req, res) => {
         return res.status(200).cookie("token", token, {
             maxAge: 1 * 24 * 60 * 60 * 1000,
             httpOnly: true,
-            sameSite: 'strict'
+            secure: true,
+            sameSite: 'none'
         }).json({
             message: `Welcome ${user.fullname}`,
             user: userResponse,
@@ -161,7 +162,12 @@ export const googleLogin = async (req, res) => {
 export const logout = async (req, res) => {
     try {
         // res.clearCookie("token");
-        return res.status(200).cookie("token", "", { maxAge: 0 }).json({
+        return res.status(200).cookie("token", "", {
+            maxAge: 0,
+            httpOnly: true,
+            secure: true,
+            sameSite: "none"
+        }).json({
             message: "User logged out successfully.", success: true
         });
     } catch (error) {
