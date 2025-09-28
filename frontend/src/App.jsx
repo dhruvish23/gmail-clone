@@ -40,11 +40,12 @@ const appRouter = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
-  },
+  }
+],
   {
     basename: baseName, // This fixes routing for GitHub Pages
   }
-]);
+);
 
 function App() {
   const { backgroundImage } = useSelector(store => store.gmail);
