@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist --repo https://github.com/dhruvish23/gmail-clone.git --branch gh-pages"
+    "deploy": "gh-pages -d dist --remove --branch gh-pages --repo https://github.com/dhruvish23/gmail-clone.git"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
