@@ -13,9 +13,9 @@ const PORT = process.env.PORT || 8080;
 // ------------server creation------------------- 
 const app = express();
 // to test the server is running write this block and run localhost:8080/home
-// app.get('/home', (req, res) => {
-//     return res.status(200).json({ message: "Server is running", success: true })
-// })
+app.get('/home', (req, res) => {
+    return res.status(200).json({ message: "Server is running", success: true })
+})
 
 // middleware
 app.use(express.urlencoded({ extended: true }));
