@@ -24,7 +24,7 @@ const appRouter = createBrowserRouter([
         element: <Inbox />,
       },
       {
-        path: "/mail/:id",
+        path: "mail/:id",
         element: <Mail />,
       },
       {
