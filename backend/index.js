@@ -8,7 +8,7 @@ import emailRoute from './routes/email.route.js';
 
 dotenv.config({});
 connectDB();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
 // ------------server creation------------------- 
 const app = express();
@@ -22,10 +22,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
+// Dynamic CORS for local + prod
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
     credentials: true
-}
+};
 app.use(cors(corsOptions));
 
 // routes
