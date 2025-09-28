@@ -11,6 +11,9 @@ import { Toaster } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import Sent from './components/Sent';
 
+// Use environment variable to set basename dynamically
+const baseName = import.meta.env.MODE === 'production' ? '/gmail-clone' : '/';
+
 const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -37,6 +40,9 @@ const appRouter = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
+  },
+  {
+    basename: baseName, // This fixes routing for GitHub Pages
   }
 ]);
 

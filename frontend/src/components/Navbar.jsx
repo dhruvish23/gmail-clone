@@ -20,6 +20,7 @@ const Navbar = () => {
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
     const settingsRef = useRef(null);
+    const API_URL = import.meta.env.VITE_BACKEND_URL;
 
     // Debug logging
     console.log('Navbar - Current user:', user);
@@ -27,7 +28,7 @@ const Navbar = () => {
     console.log('Navbar - backgroundImage:', backgroundImage);
     const logoutHandler = async () => {
         try {
-            const res = await axios.get('http://localhost:8080/api/v1/user/logout', { withCredentials: true });
+            const res = await axios.get(`${API_URL}/api/v1/user/logout`, { withCredentials: true });
             console.log(res);
             toast.success(res.data.message);
             dispatch(setAuthUser(null));

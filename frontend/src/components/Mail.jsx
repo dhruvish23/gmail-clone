@@ -18,10 +18,11 @@ const Mail = () => {
     const currentPosition = currentEmailIndex + 1;
     const hasNext = currentEmailIndex < totalEmails - 1;
     const hasPrevious = currentEmailIndex > 0;
+    const API_URL = import.meta.env.VITE_BACKEND_URL;
 
     const deleteHandler = async () => {
         try {
-            const res = await axios.delete(`http://localhost:8080/api/v1/email/${params.id}`, { withCredentials: true });
+            const res = await axios.delete(`${API_URL}/api/v1/email/${params.id}`, { withCredentials: true });
             toast.success(res.data.message);
             navigate("/");
         } catch (error) {

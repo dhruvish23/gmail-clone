@@ -35,12 +35,13 @@ const Login = () => {
     const changeHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value })
     }
+    const API_URL = import.meta.env.VITE_BACKEND_URL;
 
     const submitHandler = async (e) => {
         e.preventDefault();
         console.log(input);
         try {
-            const res = await axios.post('http://localhost:8080/api/v1/user/login', input, {
+            const res = await axios.post(`${API_URL}/api/v1/user/login`, input, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -80,7 +81,7 @@ const Login = () => {
             console.log('Sending to backend:', googleUserData);
 
             // Call your backend API to handle Google login
-            const res = await axios.post('http://localhost:8080/api/v1/user/google-login', googleUserData, {
+            const res = await axios.post(`${API_URL}/api/v1/user/google-login`, googleUserData, {
                 headers: {
                     'Content-Type': 'application/json'
                 },

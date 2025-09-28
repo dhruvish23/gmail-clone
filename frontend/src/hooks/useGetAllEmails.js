@@ -6,11 +6,12 @@ import { setEmails } from "../redux/gmailSlice";
 const useGetAllEmails = () => {
     const dispatch = useDispatch();
     const { emails } = useSelector(store => store.gmail);
+    const API_URL = import.meta.env.VITE_BACKEND_URL;
     useEffect(() => {
         const fetchEmails = async () => {
             try {
 
-                const res = await axios.get('http://localhost:8080/api/v1/email/getallemails', {
+                const res = await axios.get(`${API_URL}/api/v1/email/getallemails`, {
                     withCredentials: true
                 });
                 dispatch(setEmails(res.data.emails));

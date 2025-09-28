@@ -16,10 +16,12 @@ const Signup = () => {
         setInput({ ...input, [e.target.name]: e.target.value })
     }
 
+    const API_URL = import.meta.env.VITE_BACKEND_URL;
+
     const submitHandler = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:8080/api/v1/user/register', input, {
+            const res = await axios.post(`${API_URL}/api/v1/user/register`, input, {
                 headers: {
                     'Content-Type': 'application/json'
                 },

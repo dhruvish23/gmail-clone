@@ -47,10 +47,12 @@ const SendEmail = () => {
         }
     }, [open, composeMode, replyToEmail]);
 
+    const API_URL = import.meta.env.VITE_BACKEND_URL;
+
     const submitHandler = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:8080/api/v1/email/create', formData, {
+            const res = await axios.post(`${API_URL}/api/v1/email/create`, formData, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
