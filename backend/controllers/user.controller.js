@@ -203,6 +203,10 @@ export const googleLogin = async (req, res) => {
 
 export const forgotPassword = async (req, res) => {
 	try {
+		console.log("Forgot password route hit");
+		console.log("EMAIL_USER:", process.env.EMAIL_USER);
+		console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
+
 		const { email } = req.body;
 
 		const user = await User.findOne({ email });
