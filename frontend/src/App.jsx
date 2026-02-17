@@ -7,6 +7,8 @@ import Mail from './components/Mail'
 import SendEmail from './components/SendEmail'
 import Login from './components/Login'
 import Signup from './components/Signup'
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
 import { Toaster } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import Sent from './components/Sent';
@@ -40,6 +42,14 @@ const appRouter = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPassword />,
+  },
+  {
+    path: "/reset-password/:token",
+    element: <ResetPassword />,
   }
 ],
   {
