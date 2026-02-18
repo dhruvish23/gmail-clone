@@ -260,14 +260,17 @@ export const forgotPassword = async (req, res) => {
 			from: process.env.EMAIL_USER,
 			to: user.email,
 			subject: "Password Reset",
-			text: message,
+			text: `Reset link: ${resetUrl}`,
 		});
 
+		console.log("Email sent successfully");
 		return res.status(200).json({
 			message: "Reset email sent successfully",
 			success: true,
 		});
 	} catch (error) {
+		console.error("Email sending failed:");
+		console.error(error);
 		return res.status(500).json({
 			message: error.message,
 			success: false,
