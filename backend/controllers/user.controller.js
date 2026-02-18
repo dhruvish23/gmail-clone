@@ -2,7 +2,7 @@ import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 export const register = async (req, res) => {
 	try {
@@ -201,79 +201,58 @@ export const googleLogin = async (req, res) => {
 	}
 };
 
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 export const forgotPassword = async (req, res) => {
 	try {
 		console.log("Forgot password route hit");
-		console.log("EMAIL_USER:", process.env.EMAIL_USER);
-		console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
 
 		const { email } = req.body;
 
 		const user = await User.findOne({ email });
-
 		if (!user) {
-			return res.status(404).json({
-				message: "User not found",
-				success: false,
-			});
-		}
-
-		// Only allow local users
-		if (user.authProvider !== "local") {
-			return res.status(400).json({
-				message: "Please login using Google",
-				success: false,
-			});
+			return res.status(404).json({ message: "User not found" });
 		}
 
 		// Generate reset token
 		const resetToken = crypto.randomBytes(32).toString("hex");
 
-		user.resetPasswordToken = crypto
+		// Hash token before saving (security best practice)
+		const hashedToken = crypto
 			.createHash("sha256")
 			.update(resetToken)
 			.digest("hex");
 
+		user.resetPasswordToken = hashedToken;
 		user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 minutes
 
 		await user.save();
 
+		// Create reset URL
 		const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
-		const transporter = nodemailer.createTransport({
-			service: "gmail",
-			auth: {
-				user: process.env.EMAIL_USER,
-				pass: process.env.EMAIL_PASS,
-			},
-		});
-
-		const message = `
-        You requested a password reset.
-        Click here to reset:
-        ${resetUrl}
-
-        This link expires in 15 minutes.
-        `;
-
-		await transporter.sendMail({
-			from: process.env.EMAIL_USER,
+		// Send email via Resend
+		await resend.emails.send({
+			from: "Gmail Clone <onboarding@resend.dev>", // default allowed sender
 			to: user.email,
-			subject: "Password Reset",
-			text: `Reset link: ${resetUrl}`,
+			subject: "Password Reset Request",
+			html: `
+        <p>You requested a password reset.</p>
+        <p>Click the link below to reset your password:</p>
+        <a href="${resetUrl}" target="_blank">Reset Password</a>
+        <p>This link expires in 15 minutes.</p>
+      `,
 		});
 
-		console.log("Email sent successfully");
-		return res.status(200).json({
-			message: "Reset email sent successfully",
-			success: true,
+		console.log("Email sent successfully via Resend");
+
+		res.status(200).json({
+			message: "Password reset email sent successfully",
 		});
 	} catch (error) {
-		console.error("Email sending failed:");
-		console.error(error);
-		return res.status(500).json({
-			message: error.message,
-			success: false,
+		console.error("Forgot password error:", error);
+		res.status(500).json({
+			message: "Something went wrong",
 		});
 	}
 };
