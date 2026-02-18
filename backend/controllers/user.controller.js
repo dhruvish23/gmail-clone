@@ -201,10 +201,12 @@ export const googleLogin = async (req, res) => {
 	}
 };
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export const forgotPassword = async (req, res) => {
 	try {
+		const resend = new Resend(process.env.RESEND_API_KEY);
+		if (!process.env.RESEND_API_KEY) {
+			throw new Error("RESEND_API_KEY is missing");
+		}
 		console.log("Forgot password route hit");
 
 		const { email } = req.body;
